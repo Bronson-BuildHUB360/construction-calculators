@@ -568,6 +568,7 @@ export default function LabourPurchasingCalculator() {
             </div>
 
             <div className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+              {/* Left column: Cost Rate */}
               <div className="space-y-2">
                 <Label htmlFor="labour-cost" className="text-sm font-medium">
                   Cost Rate {isDay ? "(per Day)" : "(per Hour)"} *
@@ -582,6 +583,7 @@ export default function LabourPurchasingCalculator() {
                 />
               </div>
 
+              {/* Right column: Dropdown and Value */}
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Select additional field *</Label>
                 <Select value={labourInput.selectedField || ""} onValueChange={handleLabourFieldSelect}>
@@ -596,22 +598,18 @@ export default function LabourPurchasingCalculator() {
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Value *</Label>
-                <Input
-                  type="text"
-                  placeholder={labourInput.selectedField ? `Enter ${getFieldLabel(labourInput.selectedField)}` : "Select field first"}
-                  value={labourInput.selectedValue || ""}
-                  onChange={(e) => handleLabourValueChange(e.target.value)}
-                  disabled={!labourInput.selectedField}
-                  className="text-lg font-semibold"
-                />
-              </div>
-
-              <div className="space-y-2">
-                {/* Empty space to maintain 2x2 grid */}
+                {labourInput.selectedField && (
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Value *</Label>
+                    <Input
+                      type="text"
+                      placeholder={`Enter ${getFieldLabel(labourInput.selectedField)}`}
+                      value={labourInput.selectedValue || ""}
+                      onChange={(e) => handleLabourValueChange(e.target.value)}
+                      className="text-lg font-semibold"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -621,11 +619,13 @@ export default function LabourPurchasingCalculator() {
             <h3 className="text-lg font-semibold">Purchasing Rates</h3>
 
             <div className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+              {/* Left column: Cost Price */}
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Cost Price (Fixed)</Label>
                 <Input type="text" value="$1.00" disabled className="text-lg font-semibold bg-gray-100" />
               </div>
 
+              {/* Right column: Dropdown and Value */}
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Select additional field *</Label>
                 <Select value={purchasesInput.selectedField || ""} onValueChange={handlePurchasesFieldSelect}>
@@ -640,22 +640,18 @@ export default function LabourPurchasingCalculator() {
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Value *</Label>
-                <Input
-                  type="text"
-                  placeholder={purchasesInput.selectedField ? `Enter ${getFieldLabel(purchasesInput.selectedField)}` : "Select field first"}
-                  value={purchasesInput.selectedValue || ""}
-                  onChange={(e) => handlePurchasesValueChange(e.target.value)}
-                  disabled={!purchasesInput.selectedField}
-                  className="text-lg font-semibold"
-                />
-              </div>
-
-              <div className="space-y-2">
-                {/* Empty space to maintain 2x2 grid */}
+                {purchasesInput.selectedField && (
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Value *</Label>
+                    <Input
+                      type="text"
+                      placeholder={`Enter ${getFieldLabel(purchasesInput.selectedField)}`}
+                      value={purchasesInput.selectedValue || ""}
+                      onChange={(e) => handlePurchasesValueChange(e.target.value)}
+                      className="text-lg font-semibold"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
