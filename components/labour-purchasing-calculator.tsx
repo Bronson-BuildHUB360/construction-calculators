@@ -585,7 +585,6 @@ export default function LabourPurchasingCalculator() {
 
               {/* Right column: Dropdown and Value */}
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Select additional field *</Label>
                 <Select value={labourInput.selectedField || ""} onValueChange={handleLabourFieldSelect}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select additional field" />
@@ -599,16 +598,13 @@ export default function LabourPurchasingCalculator() {
                   </SelectContent>
                 </Select>
                 {labourInput.selectedField && (
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Value *</Label>
-                    <Input
-                      type="text"
-                      placeholder={`Enter ${getFieldLabel(labourInput.selectedField)}`}
-                      value={labourInput.selectedValue || ""}
-                      onChange={(e) => handleLabourValueChange(e.target.value)}
-                      className="text-lg font-semibold"
-                    />
-                  </div>
+                  <Input
+                    type="text"
+                    placeholder={`Enter ${getFieldLabel(labourInput.selectedField)}`}
+                    value={labourInput.selectedValue || ""}
+                    onChange={(e) => handleLabourValueChange(e.target.value)}
+                    className="text-lg font-semibold"
+                  />
                 )}
               </div>
             </div>
@@ -627,7 +623,6 @@ export default function LabourPurchasingCalculator() {
 
               {/* Right column: Dropdown and Value */}
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Select additional field *</Label>
                 <Select value={purchasesInput.selectedField || ""} onValueChange={handlePurchasesFieldSelect}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select additional field" />
@@ -641,16 +636,13 @@ export default function LabourPurchasingCalculator() {
                   </SelectContent>
                 </Select>
                 {purchasesInput.selectedField && (
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Value *</Label>
-                    <Input
-                      type="text"
-                      placeholder={`Enter ${getFieldLabel(purchasesInput.selectedField)}`}
-                      value={purchasesInput.selectedValue || ""}
-                      onChange={(e) => handlePurchasesValueChange(e.target.value)}
-                      className="text-lg font-semibold"
-                    />
-                  </div>
+                  <Input
+                    type="text"
+                    placeholder={`Enter ${getFieldLabel(purchasesInput.selectedField)}`}
+                    value={purchasesInput.selectedValue || ""}
+                    onChange={(e) => handlePurchasesValueChange(e.target.value)}
+                    className="text-lg font-semibold"
+                  />
                 )}
               </div>
             </div>
