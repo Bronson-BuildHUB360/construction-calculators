@@ -40,7 +40,7 @@ export default function LabourPurchasingCalculator() {
   const [validationError, setValidationError] = useState<string | null>(null)
 
   const handleLabourCostChange = (value: string) => {
-    const numValue = Number.parseFloat(value) || 0
+    const numValue = Number.parseFloat(value.replace("$", "")) || 0
     setLabourInput((prev: LabourInput) => ({ ...prev, cost: numValue }))
     setValidationError(null)
   }
@@ -55,7 +55,9 @@ export default function LabourPurchasingCalculator() {
   }
 
   const handleLabourValueChange = (value: string) => {
-    const numValue = Number.parseFloat(value) || 0
+    const field = labourInput.selectedField
+    if (!field) return
+    const numValue = parseInputValue(value, field)
     setLabourInput((prev: LabourInput) => ({ ...prev, selectedValue: numValue }))
     setValidationError(null)
   }
@@ -70,7 +72,9 @@ export default function LabourPurchasingCalculator() {
   }
 
   const handlePurchasesValueChange = (value: string) => {
-    const numValue = Number.parseFloat(value) || 0
+    const field = purchasesInput.selectedField
+    if (!field) return
+    const numValue = parseInputValue(value, field)
     setPurchasesInput((prev: PurchasesInput) => ({ ...prev, selectedValue: numValue }))
     setValidationError(null)
   }
@@ -188,6 +192,26 @@ export default function LabourPurchasingCalculator() {
   const getFieldLabel = (field: CalculatorField) => {
     const option = fieldOptions.find((opt) => opt.value === field)
     return option?.label || field
+  }
+
+  const getFieldSymbol = (field: CalculatorField) => {
+    const option = fieldOptions.find((opt) => opt.value === field)
+    if (option?.type === "percentage") return "%"
+    if (option?.type === "currency") return "$"
+    return ""
+  }
+
+  const formatInputValue = (value: number, field: CalculatorField) => {
+    if (value === 0) return ""
+    const symbol = getFieldSymbol(field)
+    const formattedValue = field === "markup" || field === "margin" ? value.toFixed(1) : value.toFixed(2)
+    return symbol + formattedValue
+  }
+
+  const parseInputValue = (value: string, field: CalculatorField) => {
+    const symbol = getFieldSymbol(field)
+    const cleanValue = value.replace(symbol, "").trim()
+    return Number.parseFloat(cleanValue) || 0
   }
 
   const getCurrentDate = () => {
@@ -537,20 +561,18 @@ export default function LabourPurchasingCalculator() {
               <HourDayToggle isDay={isDay} onToggle={setIsDay} />
             </div>
 
-            <div className="grid md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+            <div className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
               <div className="space-y-2">
                 <Label htmlFor="labour-cost" className="text-sm font-medium">
                   Cost Rate {isDay ? "(per Day)" : "(per Hour)"} *
                 </Label>
                 <Input
                   id="labour-cost"
-                  type="number"
-                  placeholder="0.00"
-                  value={labourInput.cost || ""}
+                  type="text"
+                  placeholder="$0.00"
+                  value={labourInput.cost ? `$${labourInput.cost.toFixed(2)}` : ""}
                   onChange={(e) => handleLabourCostChange(e.target.value)}
                   className="text-lg font-semibold"
-                  min="0.01"
-                  step="0.01"
                 />
               </div>
 
@@ -568,21 +590,14 @@ export default function LabourPurchasingCalculator() {
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Value *</Label>
+                
                 <Input
-                  type="number"
-                  placeholder="0.00"
-                  value={labourInput.selectedValue || ""}
+                  type="text"
+                  placeholder={labourInput.selectedField ? `Enter ${getFieldLabel(labourInput.selectedField)}` : "Select field first"}
+                  value={labourInput.selectedValue ? formatInputValue(labourInput.selectedValue, labourInput.selectedField) : ""}
                   onChange={(e) => handleLabourValueChange(e.target.value)}
                   disabled={!labourInput.selectedField}
                   className="text-lg font-semibold"
-                  min="0.01"
-                  step={
-                    labourInput.selectedField === "markup" || labourInput.selectedField === "margin" ? "0.1" : "0.01"
-                  }
                 />
               </div>
             </div>
@@ -592,7 +607,7 @@ export default function LabourPurchasingCalculator() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Purchasing Rates</h3>
 
-            <div className="grid md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+            <div className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Cost Price (Fixed)</Label>
                 <Input type="text" value="$1.00" disabled className="text-lg font-semibold bg-gray-100" />
@@ -612,23 +627,14 @@ export default function LabourPurchasingCalculator() {
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Value *</Label>
+                
                 <Input
-                  type="number"
-                  placeholder="0.00"
-                  value={purchasesInput.selectedValue || ""}
+                  type="text"
+                  placeholder={purchasesInput.selectedField ? `Enter ${getFieldLabel(purchasesInput.selectedField)}` : "Select field first"}
+                  value={purchasesInput.selectedValue ? formatInputValue(purchasesInput.selectedValue, purchasesInput.selectedField) : ""}
                   onChange={(e) => handlePurchasesValueChange(e.target.value)}
                   disabled={!purchasesInput.selectedField}
                   className="text-lg font-semibold"
-                  min="0.01"
-                  step={
-                    purchasesInput.selectedField === "markup" || purchasesInput.selectedField === "margin"
-                      ? "0.1"
-                      : "0.01"
-                  }
                 />
               </div>
             </div>
