@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ArrowRight, Calculator, CheckCircle, ArrowLeft } from "lucide-react"
 import { HourDayToggle } from "./hour-day-toggle"
-import type { LabourInput, PurchasesInput, CalculationResults, CalculatorField } from "@/lib/types"
+import type { LabourInput, PurchasesInput, CalculationResults, CalculatorField, CalculatorData } from "@/lib/types"
 import { calculateValues } from "@/lib/calculator"
 
 const fieldOptions = [
@@ -41,12 +41,12 @@ export default function LabourPurchasingCalculator() {
 
   const handleLabourCostChange = (value: string) => {
     const numValue = Number.parseFloat(value) || 0
-    setLabourInput((prev) => ({ ...prev, cost: numValue }))
+    setLabourInput((prev: LabourInput) => ({ ...prev, cost: numValue }))
     setValidationError(null)
   }
 
   const handleLabourFieldSelect = (field: string) => {
-    setLabourInput((prev) => ({
+    setLabourInput((prev: LabourInput) => ({
       ...prev,
       selectedField: field as CalculatorField,
       selectedValue: 0,
@@ -56,12 +56,12 @@ export default function LabourPurchasingCalculator() {
 
   const handleLabourValueChange = (value: string) => {
     const numValue = Number.parseFloat(value) || 0
-    setLabourInput((prev) => ({ ...prev, selectedValue: numValue }))
+    setLabourInput((prev: LabourInput) => ({ ...prev, selectedValue: numValue }))
     setValidationError(null)
   }
 
   const handlePurchasesFieldSelect = (field: string) => {
-    setPurchasesInput((prev) => ({
+    setPurchasesInput((prev: PurchasesInput) => ({
       ...prev,
       selectedField: field as CalculatorField,
       selectedValue: 0,
@@ -71,7 +71,7 @@ export default function LabourPurchasingCalculator() {
 
   const handlePurchasesValueChange = (value: string) => {
     const numValue = Number.parseFloat(value) || 0
-    setPurchasesInput((prev) => ({ ...prev, selectedValue: numValue }))
+    setPurchasesInput((prev: PurchasesInput) => ({ ...prev, selectedValue: numValue }))
     setValidationError(null)
   }
 
@@ -108,7 +108,7 @@ export default function LabourPurchasingCalculator() {
     if (!validateInputs()) return
 
     // Prepare labour data
-    const labourData = {
+    const labourData: CalculatorData = {
       cost: isDay ? labourInput.cost / 8 : labourInput.cost,
       markup: 0,
       profit: 0,
@@ -121,11 +121,11 @@ export default function LabourPurchasingCalculator() {
       if (isDay && (labourInput.selectedField === "profit" || labourInput.selectedField === "charge")) {
         value = value / 8
       }
-      labourData[labourInput.selectedField] = value
+      labourData[labourInput.selectedField as keyof CalculatorData] = value
     }
 
     // Prepare purchases data
-    const purchasesData = {
+    const purchasesData: CalculatorData = {
       cost: 1.0,
       markup: 0,
       profit: 0,
@@ -134,7 +134,7 @@ export default function LabourPurchasingCalculator() {
     }
 
     if (purchasesInput.selectedField) {
-      purchasesData[purchasesInput.selectedField] = purchasesInput.selectedValue
+      purchasesData[purchasesInput.selectedField as keyof CalculatorData] = purchasesInput.selectedValue
     }
 
     // Calculate results
