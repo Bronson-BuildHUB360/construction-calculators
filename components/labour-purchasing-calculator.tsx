@@ -40,7 +40,9 @@ export default function LabourPurchasingCalculator() {
   const [validationError, setValidationError] = useState<string | null>(null)
 
   const handleLabourCostChange = (value: string) => {
-    const numValue = Number.parseFloat(value.replace("$", "")) || 0
+    // Remove any non-numeric characters except decimal point
+    const cleanValue = value.replace(/[^0-9.]/g, "")
+    const numValue = Number.parseFloat(cleanValue) || 0
     setLabourInput((prev: LabourInput) => ({ ...prev, cost: numValue }))
     setValidationError(null)
   }
@@ -57,7 +59,9 @@ export default function LabourPurchasingCalculator() {
   const handleLabourValueChange = (value: string) => {
     const field = labourInput.selectedField
     if (!field) return
-    const numValue = parseInputValue(value, field)
+    // Remove any non-numeric characters except decimal point
+    const cleanValue = value.replace(/[^0-9.]/g, "")
+    const numValue = Number.parseFloat(cleanValue) || 0
     setLabourInput((prev: LabourInput) => ({ ...prev, selectedValue: numValue }))
     setValidationError(null)
   }
@@ -74,7 +78,9 @@ export default function LabourPurchasingCalculator() {
   const handlePurchasesValueChange = (value: string) => {
     const field = purchasesInput.selectedField
     if (!field) return
-    const numValue = parseInputValue(value, field)
+    // Remove any non-numeric characters except decimal point
+    const cleanValue = value.replace(/[^0-9.]/g, "")
+    const numValue = Number.parseFloat(cleanValue) || 0
     setPurchasesInput((prev: PurchasesInput) => ({ ...prev, selectedValue: numValue }))
     setValidationError(null)
   }
@@ -569,18 +575,18 @@ export default function LabourPurchasingCalculator() {
                 <Input
                   id="labour-cost"
                   type="text"
-                  placeholder="$0.00"
-                  value={labourInput.cost ? `$${labourInput.cost.toFixed(2)}` : ""}
+                  placeholder="0.00"
+                  value={labourInput.cost || ""}
                   onChange={(e) => handleLabourCostChange(e.target.value)}
                   className="text-lg font-semibold"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Additional Field *</Label>
+                <Label className="text-sm font-medium">Select additional field *</Label>
                 <Select value={labourInput.selectedField || ""} onValueChange={handleLabourFieldSelect}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select field to set" />
+                    <SelectValue placeholder="Select additional field" />
                   </SelectTrigger>
                   <SelectContent>
                     {fieldOptions.map((option) => (
@@ -590,15 +596,22 @@ export default function LabourPurchasingCalculator() {
                     ))}
                   </SelectContent>
                 </Select>
-                
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Value *</Label>
                 <Input
                   type="text"
                   placeholder={labourInput.selectedField ? `Enter ${getFieldLabel(labourInput.selectedField)}` : "Select field first"}
-                  value={labourInput.selectedValue ? formatInputValue(labourInput.selectedValue, labourInput.selectedField) : ""}
+                  value={labourInput.selectedValue || ""}
                   onChange={(e) => handleLabourValueChange(e.target.value)}
                   disabled={!labourInput.selectedField}
                   className="text-lg font-semibold"
                 />
+              </div>
+
+              <div className="space-y-2">
+                {/* Empty space to maintain 2x2 grid */}
               </div>
             </div>
           </div>
@@ -614,10 +627,10 @@ export default function LabourPurchasingCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Additional Field *</Label>
+                <Label className="text-sm font-medium">Select additional field *</Label>
                 <Select value={purchasesInput.selectedField || ""} onValueChange={handlePurchasesFieldSelect}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select field to set" />
+                    <SelectValue placeholder="Select additional field" />
                   </SelectTrigger>
                   <SelectContent>
                     {fieldOptions.map((option) => (
@@ -627,15 +640,22 @@ export default function LabourPurchasingCalculator() {
                     ))}
                   </SelectContent>
                 </Select>
-                
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Value *</Label>
                 <Input
                   type="text"
                   placeholder={purchasesInput.selectedField ? `Enter ${getFieldLabel(purchasesInput.selectedField)}` : "Select field first"}
-                  value={purchasesInput.selectedValue ? formatInputValue(purchasesInput.selectedValue, purchasesInput.selectedField) : ""}
+                  value={purchasesInput.selectedValue || ""}
                   onChange={(e) => handlePurchasesValueChange(e.target.value)}
                   disabled={!purchasesInput.selectedField}
                   className="text-lg font-semibold"
                 />
+              </div>
+
+              <div className="space-y-2">
+                {/* Empty space to maintain 2x2 grid */}
               </div>
             </div>
           </div>
