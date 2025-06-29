@@ -175,8 +175,8 @@ export default function LabourPurchasingCalculator() {
     setValidationError(null)
   }
 
-  const getDisplayValue = (value: number, field: CalculatorField) => {
-    if (isDay && results && (field === "cost" || field === "profit" || field === "charge")) {
+  const getDisplayValue = (value: number, field: CalculatorField, isLabour: boolean = true) => {
+    if (isDay && results && isLabour && (field === "cost" || field === "profit" || field === "charge")) {
       return (value * 8).toFixed(2)
     }
     if (field === "markup" || field === "margin") {
@@ -239,14 +239,14 @@ export default function LabourPurchasingCalculator() {
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4 print:hidden">
                 <div className="text-center p-4 bg-blue-50 rounded-lg">
                   <Label className="text-sm text-gray-600">Cost</Label>
-                  <div className="text-xl font-bold text-blue-600">${getDisplayValue(results.labour.cost, "cost")}</div>
+                  <div className="text-xl font-bold text-blue-600">${getDisplayValue(results.labour.cost, "cost", true)}</div>
                 </div>
                 <div
                   className={`text-center p-4 rounded-lg ${labourInput.selectedField === "markup" ? "bg-blue-50" : "bg-gray-50"}`}
                 >
                   <Label className="text-sm text-gray-600">Markup</Label>
                   <div className={`text-xl font-bold ${labourInput.selectedField === "markup" ? "text-blue-600" : ""}`}>
-                    {getDisplayValue(results.labour.markup, "markup")}%
+                    {getDisplayValue(results.labour.markup, "markup", true)}%
                   </div>
                 </div>
                 <div
@@ -254,7 +254,7 @@ export default function LabourPurchasingCalculator() {
                 >
                   <Label className="text-sm text-gray-600">Profit</Label>
                   <div className={`text-xl font-bold ${labourInput.selectedField === "profit" ? "text-blue-600" : ""}`}>
-                    ${getDisplayValue(results.labour.profit, "profit")}
+                    ${getDisplayValue(results.labour.profit, "profit", true)}
                   </div>
                 </div>
                 <div
@@ -262,7 +262,7 @@ export default function LabourPurchasingCalculator() {
                 >
                   <Label className="text-sm text-gray-600">Margin</Label>
                   <div className={`text-xl font-bold ${labourInput.selectedField === "margin" ? "text-blue-600" : ""}`}>
-                    {getDisplayValue(results.labour.margin, "margin")}%
+                    {getDisplayValue(results.labour.margin, "margin", true)}%
                   </div>
                 </div>
                 <div
@@ -270,7 +270,7 @@ export default function LabourPurchasingCalculator() {
                 >
                   <Label className="text-sm text-gray-600">Charge</Label>
                   <div className={`text-xl font-bold ${labourInput.selectedField === "charge" ? "text-blue-600" : ""}`}>
-                    ${getDisplayValue(results.labour.charge, "charge")}
+                    ${getDisplayValue(results.labour.charge, "charge", true)}
                   </div>
                 </div>
               </div>
@@ -289,7 +289,7 @@ export default function LabourPurchasingCalculator() {
                     <tr>
                       <td className="border border-gray-300 px-3 py-2 font-medium">Cost</td>
                       <td className="border border-gray-300 px-3 py-2 text-right font-bold">
-                        ${getDisplayValue(results.labour.cost, "cost")}
+                        ${getDisplayValue(results.labour.cost, "cost", true)}
                       </td>
                       <td className="border border-gray-300 px-3 py-2 text-center text-blue-600 font-medium">
                         User Input
@@ -298,7 +298,7 @@ export default function LabourPurchasingCalculator() {
                     <tr>
                       <td className="border border-gray-300 px-3 py-2">Markup</td>
                       <td className="border border-gray-300 px-3 py-2 text-right font-bold">
-                        {getDisplayValue(results.labour.markup, "markup")}%
+                        {getDisplayValue(results.labour.markup, "markup", true)}%
                       </td>
                       <td className="border border-gray-300 px-3 py-2 text-center">
                         {labourInput.selectedField === "markup" ? (
@@ -311,7 +311,7 @@ export default function LabourPurchasingCalculator() {
                     <tr>
                       <td className="border border-gray-300 px-3 py-2">Profit</td>
                       <td className="border border-gray-300 px-3 py-2 text-right font-bold">
-                        ${getDisplayValue(results.labour.profit, "profit")}
+                        ${getDisplayValue(results.labour.profit, "profit", true)}
                       </td>
                       <td className="border border-gray-300 px-3 py-2 text-center">
                         {labourInput.selectedField === "profit" ? (
@@ -324,7 +324,7 @@ export default function LabourPurchasingCalculator() {
                     <tr>
                       <td className="border border-gray-300 px-3 py-2">Margin</td>
                       <td className="border border-gray-300 px-3 py-2 text-right font-bold">
-                        {getDisplayValue(results.labour.margin, "margin")}%
+                        {getDisplayValue(results.labour.margin, "margin", true)}%
                       </td>
                       <td className="border border-gray-300 px-3 py-2 text-center">
                         {labourInput.selectedField === "margin" ? (
@@ -337,7 +337,7 @@ export default function LabourPurchasingCalculator() {
                     <tr>
                       <td className="border border-gray-300 px-3 py-2">Charge</td>
                       <td className="border border-gray-300 px-3 py-2 text-right font-bold">
-                        ${getDisplayValue(results.labour.charge, "charge")}
+                        ${getDisplayValue(results.labour.charge, "charge", true)}
                       </td>
                       <td className="border border-gray-300 px-3 py-2 text-center">
                         {labourInput.selectedField === "charge" ? (
@@ -369,7 +369,7 @@ export default function LabourPurchasingCalculator() {
                   <div
                     className={`text-xl font-bold ${purchasesInput.selectedField === "markup" ? "text-blue-600" : ""}`}
                   >
-                    {getDisplayValue(results.purchases.markup, "markup")}%
+                    {getDisplayValue(results.purchases.markup, "markup", false)}%
                   </div>
                 </div>
                 <div
@@ -379,7 +379,7 @@ export default function LabourPurchasingCalculator() {
                   <div
                     className={`text-xl font-bold ${purchasesInput.selectedField === "profit" ? "text-blue-600" : ""}`}
                   >
-                    ${getDisplayValue(results.purchases.profit, "profit")}
+                    ${getDisplayValue(results.purchases.profit, "profit", false)}
                   </div>
                 </div>
                 <div
@@ -389,7 +389,7 @@ export default function LabourPurchasingCalculator() {
                   <div
                     className={`text-xl font-bold ${purchasesInput.selectedField === "margin" ? "text-blue-600" : ""}`}
                   >
-                    {getDisplayValue(results.purchases.margin, "margin")}%
+                    {getDisplayValue(results.purchases.margin, "margin", false)}%
                   </div>
                 </div>
                 <div
@@ -399,7 +399,7 @@ export default function LabourPurchasingCalculator() {
                   <div
                     className={`text-xl font-bold ${purchasesInput.selectedField === "charge" ? "text-blue-600" : ""}`}
                   >
-                    ${getDisplayValue(results.purchases.charge, "charge")}
+                    ${getDisplayValue(results.purchases.charge, "charge", false)}
                   </div>
                 </div>
               </div>
@@ -423,7 +423,7 @@ export default function LabourPurchasingCalculator() {
                     <tr>
                       <td className="border border-gray-300 px-3 py-2">Markup</td>
                       <td className="border border-gray-300 px-3 py-2 text-right font-bold">
-                        {getDisplayValue(results.purchases.markup, "markup")}%
+                        {getDisplayValue(results.purchases.markup, "markup", false)}%
                       </td>
                       <td className="border border-gray-300 px-3 py-2 text-center">
                         {purchasesInput.selectedField === "markup" ? (
@@ -436,7 +436,7 @@ export default function LabourPurchasingCalculator() {
                     <tr>
                       <td className="border border-gray-300 px-3 py-2">Profit</td>
                       <td className="border border-gray-300 px-3 py-2 text-right font-bold">
-                        ${getDisplayValue(results.purchases.profit, "profit")}
+                        ${getDisplayValue(results.purchases.profit, "profit", false)}
                       </td>
                       <td className="border border-gray-300 px-3 py-2 text-center">
                         {purchasesInput.selectedField === "profit" ? (
@@ -449,7 +449,7 @@ export default function LabourPurchasingCalculator() {
                     <tr>
                       <td className="border border-gray-300 px-3 py-2">Margin</td>
                       <td className="border border-gray-300 px-3 py-2 text-right font-bold">
-                        {getDisplayValue(results.purchases.margin, "margin")}%
+                        {getDisplayValue(results.purchases.margin, "margin", false)}%
                       </td>
                       <td className="border border-gray-300 px-3 py-2 text-center">
                         {purchasesInput.selectedField === "margin" ? (
@@ -462,7 +462,7 @@ export default function LabourPurchasingCalculator() {
                     <tr>
                       <td className="border border-gray-300 px-3 py-2">Charge</td>
                       <td className="border border-gray-300 px-3 py-2 text-right font-bold">
-                        ${getDisplayValue(results.purchases.charge, "charge")}
+                        ${getDisplayValue(results.purchases.charge, "charge", false)}
                       </td>
                       <td className="border border-gray-300 px-3 py-2 text-center">
                         {purchasesInput.selectedField === "charge" ? (
